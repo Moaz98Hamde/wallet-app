@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -40,5 +42,18 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * Configure the model factory to create a user with a primary wallet.
+     */
+    public function withPrimaryWallet(): static
+    {
+        return $this->has(
+            Wallet::factory()
+                ->primary()
+                ->state(fn(array $attributes, User $user) => ['user_id' => $user->id]),
+            'wallets'
+        );
     }
 }

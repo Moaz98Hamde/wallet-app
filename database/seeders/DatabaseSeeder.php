@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WebhookPayload;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +16,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create a user with a primary wallet
+        $user = User::factory()->withPrimaryWallet()->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create a transaction for a specific wallet
+        $transaction = Transaction::factory()
+            ->for($user->primaryWallet())
+            ->create();
+
+        // Create a webhook payload
+        $webhook = WebhookPayload::factory()->create();
+
+        // Create multiple wallets for a user
+        $user = User::factory()
+            ->has(Wallet::factory()->count(3))
+            ->create();
     }
 }

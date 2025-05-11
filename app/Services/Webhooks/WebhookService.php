@@ -29,12 +29,12 @@ class WebhookService
 
     public function queue(): self
     {
-        $handler = $this->setHandler();
+        $handler = $this->getHandler();
         dispatch(new ProcessWebhookPayload($handler, $this->payload));
         return $this;
     }
 
-    private function setHandler()
+    private function getHandler()
     {
         $handlerClass = 'App\\Services\\Webhooks\\Handlers\\' . ucfirst($this->bankName) . 'BankHandler';
         if (class_exists($handlerClass)) {
