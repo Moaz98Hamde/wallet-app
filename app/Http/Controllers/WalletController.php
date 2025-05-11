@@ -21,7 +21,10 @@ class WalletController extends Controller
         $wallet = $this->walletService->getWallets($request->user());
         $transaction = $this->walletService->credit($wallet, $request->amount, $request->description);
 
-        return response()->json($transaction, 201);
+        return response()->json([
+            "message" => "Wallet credited successfully",
+            "new_balance" => $wallet->balance
+        ], 201);
     }
 
     public function debit(WalletRequest $request)
@@ -30,10 +33,12 @@ class WalletController extends Controller
 
         try {
             $transaction = $this->walletService->debit($wallet, $request->amount, $request->description);
-            return response()->json($transaction, 201);
+            return response()->json([
+                "message" => "Wallet debited successfully",
+                "new_balance" => $wallet->balance
+            ], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 422);
         }
     }
 }
-
