@@ -18,10 +18,13 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->decimal('balance', 15, 3)->default(0);
+            $table->boolean('is_primary')
+                ->default(false)
+                ->comment('Indicates if this is the primary wallet for the user');
+            $table->decimal('balance', 15, 3)
+                ->default(0);
             $table->timestamps();
         });
-
     }
 
     /**

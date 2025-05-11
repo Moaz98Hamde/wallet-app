@@ -19,6 +19,9 @@ class Wallet extends Model
             if (empty($wallet->id)) {
                 $wallet->id = (string) Str::uuid();
             }
+            if (auth()->user() && auth()->user()->wallets()->count() === 0) {
+                $wallet->is_primary = true;
+            }
         });
     }
 

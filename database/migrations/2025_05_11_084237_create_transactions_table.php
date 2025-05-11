@@ -20,8 +20,11 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->integer('type')->default(TransactionType::CREDIT->value);
             $table->decimal('amount', 15, 2);
+            $table->string('reference')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+
+            $table->unique(['wallet_id', 'reference']);
         });
     }
 

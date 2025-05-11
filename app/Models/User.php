@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Wallet::class);
     }
+
+    public function primaryWallet(): ?Wallet
+    {
+        return $this->wallets()->where('is_primary', true)->first();
+    }
 }
